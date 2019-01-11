@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>抽奖dome</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				margin: 0;
+				font-family: Helvetica, sans-serif;
+				overflow: hidden;
+				background: url(img/bg/bg_draw.jpg);
+				background-size: 100% 100%; 
+			}
+
+			a {
+				color: #ffffff;
+			}
+
+			#info {
+				position: absolute;
+				width: 100%;
+				color: #ffffff;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				font-weight: bold;
+				text-align: center;
+				z-index: 1;
+			}
+
+			#menu {
+				position: absolute;
+				bottom: 20px;
+				width: 100%;
+				text-align: center;
+			}
+
+			.element {
+				width: 100px;/* 120 160 */
+				height: 100px;
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.25);
+				text-align: center;
+				cursor: default;
+			}
+
+			.element:hover {
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+				border: 1px solid rgba(127,255,255,0.75);
+			}
+				.element img{
+					width:100px;
+					height:100px;
+				}
+
+				.element .number {
+					position: absolute;
+					top: 20px;
+					right: 20px;
+					font-size: 12px;
+					color: rgba(127,255,255,0.75);
+				}
+
+				.element .symbol {
+					position: absolute;
+					top: 40px;
+					left: 0px;
+					right: 0px;
+					font-size: 60px;
+					font-weight: bold;
+					color: rgba(255,255,255,0.75);
+					text-shadow: 0 0 10px rgba(0,255,255,0.95);
+				}
+
+				.element .details {
+					position: absolute;
+					bottom: 15px;
+					left: 0px;
+					right: 0px;
+					font-size: 12px;
+					color: rgba(127,255,255,0.75);
+				}
+
+			button {
+				color: rgba(127,255,255,0.75);
+				background: transparent;
+				outline: 1px solid rgba(127,255,255,0.75);
+				border: 0px;
+				padding: 5px 10px;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: rgba(0,255,255,0.5);
+			}
+			button:active {
+				color: #000000;
+				background-color: rgba(0,255,255,0.75);
+			}
+			.op-0{opacity: 0}
+			.scole_div{
+				 -webkit-animation: scaleit 4s cubic-bezier(.21, .61, .35, 1) 0.9s 1 normal forwards;
+			    animation: scaleit 4s cubic-bezier(.21, .61, .35, 1) 0.9s 1 normal forwards;
+			}
+			@keyframes scaleit {
+				0% {
+				    transform: scale3d(0.1,0.1,1);opacity: 0;
+				}
+				30% {
+				    transform: scale3d(1.1,1.1,1); opacity: 1;
+				}
+				100% {
+				    transform: scale3d(1,1,1); opacity: 1;
+				}
+			}
+			.leftin_div{
+				 -webkit-animation: left_load .5s cubic-bezier(.21, .61, .35, 1) 0.9s 1 normal forwards;
+			    animation: left_load .5s cubic-bezier(.21, .61, .35, 1) 0.9s 1 normal forwards;
+			}
+			@keyframes left_load {
+				0% {
+				    transform:translate3d(-300px,0,0);opacity: 0;
+				}
+				80% {
+				    transform:translate3d(10px,0,0);opacity: 1;
+				}
+				100% {
+				    transform:translate3d(0,0,0);opacity: 1;
+				}
+			}
+			@keyframes opacity1 {
+				0% {
+				    transform:translate3d(-200px,-200px,0); opacity: 0;
+				}
+				30% {
+				    transform:translate3d(10px,10px,0);opacity: 1;
+				}
+				100% {
+				    transform:translate3d(0,0,0);opacity: 1;
+				}
+			}
+			.hoverspan:hover #dbclick_btn{
+				animation: opacity1 5s cubic-bezier(.21, .61, .35, 1) 0.9s 1 normal forwards;
+			}
+			
+			.element>img,.element{border-radius:10px;}
+			.draw_div{position:absolute;top:30vh;max-height:60vh;left:27vw;overflow-y:auto;flex-wrap:wrap;width: 42vw; padding: 2vw;display: flex;flex-direction: row;justify-content: space-around; color: white;background-color: rgba(0,0,0,.6);}
+			.draw_item{margin-right:15px;margin-right:15px;width:80px;height: 120px;text-align: center;padding: 5px;}
+			.draw_img{width:70px;height: 70px;border-radius: 50%;}
+			.draw_prize_div{position:absolute;top:15vh;left:6vw;width: 18vw; padding: 1vw;display: flex;flex-direction: row;color: white;background-color: rgba(0,0,0,.6);text-align: center;}
+			.draw_prize_div input{height: 15px;width: 100px;border-radius: 2px;border:none;padding: none;background: transparent;border:1px solid rgba(0,255,255,0.95);color: white;padding: 8px 10px}
+			.draw_prize_item>div{padding-top:25px;padding-bottom: 25px; }
+			.draw_prize_img{width: 18vw;height:18vw;}
+			#num_draw_l{padding:0 15px; }
+			.draw_list_div{position:absolute;top:15vh;right:6vw;width: 18vw;overflow-y:auto;max-height: 75vh; padding: 1vw;color: white;background-color: rgba(0,0,0,.6);min-height:50vh }
+			.draw_list_item{padding: 8px 10px;display: flex;flex-direction:row;position: relative;}
+			.draw_list_item .draw_maitail{width: 100%;height: 100%;background: rgba(0,0,0,0.8);position: absolute;left: 0;top: 0}
+			.draw_list_item .draw_maitail>div{
+				width: 100px;margin: 19px auto;
+			}
+			.draw_list_item .draw_maitail>div>button{
+				width: 50px;height: 50px;
+				border-radius: 50%;
+				border:none;
+				padding: none;
+				margin: 0;
+				outline: none;
+				line-height: 0;
+			}
+			.draw_list_item .draw_maitail>div>button:nth-child(1){
+				background: red;
+				color: #333;
+			}
+			.draw_list_item .draw_maitail>div>button:nth-child(2){
+				background: #ccc;
+				color: #333;
+			}
+			.drawlist_title{
+				text-align: center;
+				 background-image: -webkit-linear-gradient(left,blue,#66ffff 10%,#cc00ff 20%,#CC00CC 30%, #CCCCFF 40%, #00FFFF 50%,#CCCCFF 60%,#CC00CC 70%,#CC00FF 80%,#66FFFF 90%,blue 100%);
+			    -webkit-text-fill-color: transparent;/* 将字体设置成透明色 */
+			    -webkit-background-clip: text;/* 裁剪背景图，使文字作为裁剪区域向外裁剪 */
+			    -webkit-background-size: 200% 100%; 
+			    -webkit-animation: masked-animation 4s linear infinite;
+			    font-size: 23px;
+			}
+			@keyframes masked-animation {
+			    0% {
+			        background-position: 0  0;
+			    }
+			    100% {
+			        background-position: -100%  0;
+			    }
+			}
+			body{
+			    -webkit-user-select: none;
+			    -moz-user-select: none;
+			    -ms-user-select: none;
+			    user-select: none;
+			}
+			.goinbtn_div{
+				position: absolute;
+				width: 100%;
+				top: 45vh;
+				text-align: center;
+			}
+			.goinbtn_div div{font-size: 50px;color:white;}
+			.goinbtn_div button{font-size: 23px;margin-top: 30px;}
+			.draw_list_img{width: 50px;height: 50px;}
+			.draw_list_text{line-height: 50px;padding-left: 15px;}
+			.draw_item>.draw_text{padding: 5px 0;}
+			.hide{display: none;}
+			/*.show_info{position:fixed;background-color:rgba(0,0,0,.6);padding:10px;width:300px;margin:0 auto;left: 0;right:0;border-radius: 5px;box-shadow: 0 0 10px 0 #fff;top:30%;}
+			.show_info img{display:block;margin:auto;border-radius: 5px;box-shadow: 0 0 10px 0 #888;}
+			.show_info .intro{color:#fff;text-indent:20px;margin-top:10px;height:65px;overflow:hidden;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;}
+			.show_info .info_my{text-align: center;}
+			.show_info .info_my > *{display:inline-block !important;vertical-align: middle;}
+			.show_info .info_my .info_mem{color:#fff;max-width:120px;}
+			.show_info .info_my .info_mem > div{text-align: left;}
+			.show_info .info_my .info_mem > div.nickname{max-width: 120px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}*/
+		</style>
+		<link rel="stylesheet" href="css/animate.min.css">
+	</head>
+	<body>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/three.js"></script>
+		<script src="js/tween.min.js"></script>
+		<script src="js/TrackballControls.js"></script>
+		<script src="js/CSS3DRenderer.js"></script>
+
+		<div id="container"></div>
+		<div class="goinbtn_div">
+			<div>2019年会抽奖</div>
+			<button id="bagienclick">开始</button>
+		</div>
+		<div id="info">
+			<audio  height="100" width="100" autoplay="autoplay" loop="-1">
+			<source src="./img/music.mp3" type="audio/mp3" />
+			<source src="./img/music.mp3" type="audio/ogg" />
+			<embed height="100" width="100" src="./img/music.mp3" />
+			</audio>
+		</div>
+		<div class="draw_div op-0">
+			<div class="draw_item hide"></div>
+		</div>
+		<div class="draw_prize_div hide beginhide">
+			<div class="draw_prize_item">
+				<img src="img/avator.png"  id="user_msg_img" alt="" class="draw_prize_img"/>
+				<div class="draw_prize_name">
+					<button id="left_n_btn">l</button><label id="num_draw_l">num</label>
+					<span class="hoverspan"><button id="rigth_n_btn">r</button>
+					<button id="dbclick_btn" class="op-0">+</button></span>
+				</div>
+				<div id="draw_db_c" class="hide">奖项名称:<input id="draw_db_text" type="text"/></div>
+				<div class="draw_prize_btn">
+					<label >人数:</label><input id="num_draw_pl" type="text"/>
+				</div>
+				<button id="btn_draw_click" >开始抽奖</button>
+			</div>
+		</div>
+		<div class="draw_list_div hide beginhide">
+			<div class="drawlist_title">获奖者名单</div>
+			<div class="draw_list_item leftin_div hide">
+			</div>
+		</div>
+		<script>
+
+		//抽奖demo开始，图形变化
+		var timeObj;//定时器对象
+		var drawObj = [{
+			p_name:'一等奖',//奖项名字
+			p_num:1,//抽奖人数
+			p_list:[]//获奖名单
+			},
+			{p_name:'二等奖',p_num:5,p_list:[]}];//抽奖奖项存储对象
+		var nowindex = 0;//当前奖项   index
+			var personArray = new Array;
+			var  arrimgpostion = [
+				{img:'img/1.jpg',id:'1',name:'1'},
+				{img:'img/2.jpg',id:'2',name:'2'},
+				{img:'img/3.jpg',id:'3',name:'3'},
+				{img:'img/4.jpg',id:'4',name:'4'},
+				{img:'img/5.jpg',id:'5',name:'5'},
+				{img:'img/6.jpg',id:'6',name:'6'},
+				{img:'img/7.jpg',id:'7',name:'7'},
+				{img:'img/8.jpg',id:'8',name:'8'},
+				{img:'img/9.jpg',id:'9',name:'9'},
+				{img:'img/10.jpg',id:'10',name:'10'},
+				{img:'img/11.jpeg',id:'11',name:'11'},
+				{img:'img/13.jpg',id:'12',name:'12'},
+				{img:'img/14.jpg',id:'13',name:'13'},
+				{img:'img/15.jpg',id:'14',name:'14'},
+				{img:'img/12.jpg',id:'15',name:'15'},
+				{img:'img/16.jpg',id:'16',name:'16'},
+				{img:'img/17.jpg',id:'17',name:'17'}]
+	        for(var i=0;i<199;i++){
+	        	if(i<arrimgpostion.length){
+	        		personArray.push({
+						image: arrimgpostion[i].img
+			        });
+	        	}else{
+	        		personArray.push({
+						image: 'img/avator.png'
+			        });
+	        	}	
+	        }
+	        var table = new Array;
+		    for (var i = 0; i < personArray.length; i++) {
+		        table[i] = new Object();
+		        if (i < personArray.length) {
+		            table[i] = personArray[i];
+		            table[i].src = personArray[i].thumb_image;
+		        } 
+		        table[i].p_x = i % 20 + 1;
+		        table[i].p_y = Math.floor(i / 20) + 1;
+		    }
+			var camera, scene, renderer;
+			var controls;
+			var objects = [];
+			var targets = { table: [], sphere: [], helix: [], grid: [] ,mytab:[],dottab:[]};
+			init();
+			animate();
+		//从localStorage取到抽奖奖项存储对象
+		(window.localStorage)&&window.localStorage.getItem('drawObjkey')&&(drawObj=JSON.parse(window.localStorage.getItem('drawObjkey')));
+
+		//判断是否有获奖名单，及遍历
+		$.each(drawObj,function(index, el) {
+			$.each(el.p_list,function(indx, val) {
+				$('.draw_list_div>.draw_list_item:last-child').after('<div class="draw_list_item op-0 leftin_div" data-id="'+val.id+'">\
+					<img src="'+val.img+'" alt="" class="draw_img"/>\
+					<div class="draw_list_text">\
+						'+val.name+' ('+el.p_name+')\
+					</div>\
+				</div>');
+			});
+		});
+		setPlval(nowindex,drawObj)
+		//右移
+		$('#rigth_n_btn').click(function(event) {
+			nowindex++;
+			nowindex=nowindex>=drawObj.length?0:nowindex;
+			setPlval(nowindex,drawObj)
+		});
+		//左移
+		$('#left_n_btn').click(function(event) {
+			nowindex--;
+			nowindex=nowindex<0?(drawObj.length-1):nowindex;
+			setPlval(nowindex,drawObj)
+		});
+		var dbBefIndex;//添加之前的奖项   index
+		//添加奖项
+		$('#dbclick_btn').click(function(event) {
+			$(".draw_prize_name").addClass('hide');
+			$("#draw_db_c").removeClass('hide');
+			dbBefIndex = nowindex;
+			nowindex = drawObj.length;
+			drawObj.push({p_name:'',p_num:'',p_list:[]})
+			setPlval(nowindex,drawObj);
+		});
+		//更改奖项名
+		var isdbclick = false;
+		$("#num_draw_l").dblclick(function(){
+			$(".draw_prize_name").addClass('hide');
+			$("#draw_db_c").removeClass('hide');
+			isdbclick = true;
+		});
+		$("#draw_db_text").blur(function(){
+			$(".draw_prize_name").removeClass('hide');
+			$("#draw_db_c").addClass('hide');
+			if(isdbclick){
+				isdbclick = false;
+				if($(this).val()=='')return;
+				drawObj[nowindex].p_name = $(this).val();
+				setPlval(nowindex,drawObj);
+				return;
+			}
+			if($(this).val()==''){
+				drawObj.pop();
+				nowindex = dbBefIndex;
+				setPlval(nowindex,drawObj)
+				return;
+			}
+		  	drawObj[nowindex].p_name = $(this).val();
+			setPlval(nowindex,drawObj);
+		});
+		$("#num_draw_pl").blur(function(){
+		  drawObj[nowindex].p_num = $(this).val();
+		});
+		var isbtnchagee = false,isbtntime=0;
+		$('#bagienclick').click(function(){
+			$('.goinbtn_div').addClass('op-0');
+			isbtnchagee = true;
+		})
+		$('.draw_list_div').on('dblclick','.draw_list_item',function(e){
+			var idstr = $(this).attr('data-id');
+			$('.draw_maitail').remove();
+		      $(this).append('<div class="draw_maitail"><div><button id="delete_el_maitail">删除</button><button id="cancel_el_maitail">取消</button></div></div>')
+		      var _this = this;
+		     $('#delete_el_maitail').click(function(event) {
+		     	var deleteindex,deleteid;
+		     	$.each(drawObj,function(index, el) {
+					$.each(el.p_list,function(indx, val) {
+						if(val.id == idstr){
+							deleteid = indx;
+							deleteindex = index;
+						};
+					});
+				});
+				drawObj[deleteindex].p_list.splice(deleteid,1);
+				(window.localStorage)&&window.localStorage.setItem('drawObjkey',JSON.stringify(drawObj));
+				$(_this).remove();
+			});
+			$('#cancel_el_maitail').click(function(event) {
+				$(_this).find('.draw_maitail').remove()
+			});
+		})
+		//抽奖事件
+		$('#btn_draw_click').click(function(event) {
+			if($('#btn_draw_click').text()=='停止'){
+				//如果是停止  开始进行抽奖代码！
+				$(this).text('开始抽奖')
+				setTimeout(function(){
+					var arrdrawin = [];
+					for (var i = drawObj[nowindex].p_num; i > 0; i--) {
+						var len = arrimgpostion.length;
+						if(len<=0)break;
+						var index = Math.floor(Math.random() * len);
+						arrdrawin.push({
+							img:arrimgpostion[index].img,
+							name:arrimgpostion[index].name,
+							id:arrimgpostion[index].id,
+						});
+						arrimgpostion.splice(index,1);
+					}
+					arrdrawin.unshift(drawObj[nowindex].p_list.length-1, 0);
+					Array.prototype.splice.apply(drawObj[nowindex].p_list, arrdrawin);  
+					(window.localStorage)&&window.localStorage.setItem('drawObjkey',JSON.stringify(drawObj));
+					arrdrawin.splice(0,2);
+					clearInterval(timeObj);
+					$("#user_msg_img").attr('src','img/avator.png');
+					var indexForTimeout=0;
+					$('.draw_div').html('<div class="draw_item hide"></div>');
+					$('.draw_div').addClass('scole_div')
+					function drawSetEnd(){
+						setTimeout(function(){
+							$($('.draw_list_div>.draw_list_item')[0]).before('<div class="draw_list_item op-0 leftin_div" data-id="'+arrdrawin[indexForTimeout].id+'">\
+							<img src="'+arrdrawin[indexForTimeout].img+'" alt="" class="draw_img"/>\
+							<div class="draw_list_text">\
+								'+arrdrawin[indexForTimeout].name+' ('+drawObj[nowindex].p_name+')\
+							</div>\
+						</div>');
+							console.log($('.draw_list_div>.draw_list_item:first-child'))
+							//$(".draw_list_div").scrollTop($(".draw_list_div")[0].scrollHeight);
+							indexForTimeout++;
+							if(indexForTimeout>=arrdrawin.length)return;
+							drawSetEnd()
+						},500)
+					}
+					function drawSetTimeout(){
+						setTimeout(function(){
+							$('.draw_div>.draw_item:last-child').after('<div class="draw_item scole_div op-0">\
+								<img src="'+arrdrawin[indexForTimeout].img+'" alt="" class="draw_img"/>\
+								<div class="draw_text">\
+									'+arrdrawin[indexForTimeout].name+'\
+								</div>\
+							</div>');
+							indexForTimeout++;
+							if(indexForTimeout>=arrdrawin.length){
+								indexForTimeout=0;
+								setTimeout(function(){
+									$('.draw_div').html('<div class="draw_item hide"></div>');
+									$('.draw_div').removeClass('scole_div');
+									drawSetEnd();
+								},5500);
+								return;
+							}
+							drawSetTimeout();
+						},500)
+					}
+					drawSetTimeout();
+					transform(targets.mytab, 500 );
+				},0)
+			}else{
+				$(this).text('停止')
+				var indeximg=0;
+				timeFunction(function(){
+					indeximg=(indeximg>=arrimgpostion.length-1)?0:(++indeximg);
+					if(arrimgpostion[indeximg])$("#user_msg_img").attr('src',arrimgpostion[indeximg].img);
+				});
+			}
+		});
+		function init() {
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 3000;
+				scene = new THREE.Scene();
+				scene.position.z = -5000;
+				// table
+				for ( var i = 0; i < table.length; i ++ ) {
+					var element = document.createElement( 'div' );
+					element.className = 'element';
+					element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
+					var img = document.createElement('img');
+					img.src = table[ i ].image;
+					element.appendChild( img );
+					var object = new THREE.CSS3DObject( element );
+					object.position.x = Math.random() * 7000 - 3500;
+					object.position.y = Math.random() * 7000 - 3500;
+					object.position.z = Math.random() * 7000 - 3500;
+					scene.add( object );
+					//mytab,dottab
+					objects.push( object );
+					var object2 = new THREE.Object3D();
+					object2.position.x =object.position.x;
+					object2.position.y =object.position.y;
+					object2.position.z =object.position.z;
+					targets.mytab.push( object2);
+					var object2 = new THREE.Object3D();
+					object2.position.x =0;
+					object2.position.y =0;
+					object2.position.z =0;
+					targets.dottab.push( object2);
+					var object1 = new THREE.Object3D();
+					object1.position.x = ( table[ i ].p_x * 140 ) - 1330;
+					object1.position.y = - ( table[ i ].p_y * 180 ) + 990;
+					targets.table.push( object1 );
+				}
+				// sphere
+				var vector = new THREE.Vector3();
+				var spherical = new THREE.Spherical();
+				for ( var i = 0, l = objects.length; i < l; i ++ ) {
+					var phi = Math.acos( -1 + ( 2 * i ) / l );
+					var theta = Math.sqrt( l * Math.PI ) * phi;
+					var object = new THREE.Object3D();
+					spherical.set( 800, phi, theta );
+					object.position.setFromSpherical( spherical );
+					vector.copy( object.position ).multiplyScalar( 2 );
+					object.lookAt( vector );
+					targets.sphere.push( object );
+				}
+				// helix
+				var vector = new THREE.Vector3();
+				var cylindrical = new THREE.Cylindrical();
+
+				for ( var i = 0, l = objects.length; i < l; i ++ ) {
+
+					var theta = i * 0.175 + Math.PI;
+					var y = - ( i * 5 ) + 450;
+					var object = new THREE.Object3D();
+					// 参数一 圈的大小 参数二 左右间距 参数三 上下间距
+					cylindrical.set( 900, theta, y );
+					object.position.setFromCylindrical( cylindrical );
+					vector.x = object.position.x * 2;
+					vector.y = object.position.y;
+					vector.z = object.position.z * 2;
+
+					object.lookAt( vector );
+
+					targets.helix.push( object );
+
+				}
+
+				// grid
+
+				for ( var i = 0; i < objects.length; i ++ ) {
+					var object = new THREE.Object3D();
+					object.position.x = ( ( i % 5 ) * 400 ) - 800; // 400 图片的左右间距  800 x轴中心店
+					object.position.y = ( - ( Math.floor( i / 5 ) % 5 ) * 300 ) + 500;  // 500 y轴中心店
+					object.position.z = ( Math.floor( i / 25 ) ) * 200 - 800;// 300调整 片间距 800z轴中心店
+					targets.grid.push( object );
+
+				}
+
+				//渲染
+				renderer = new THREE.CSS3DRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.domElement.style.position = 'absolute';
+				document.getElementById( 'container' ).appendChild( renderer.domElement );
+
+				// 鼠标控制
+				controls = new THREE.TrackballControls( camera, renderer.domElement );
+				controls.rotateSpeed = 0.5;
+				controls.minDistance = 500;
+				controls.maxDistance = 6000;
+				controls.addEventListener( 'change', render );
+				//自动更换
+								
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+			//图形变换的函数
+			function transform( targets, duration ) {
+				TWEEN.removeAll();
+				for ( var i = 0; i < objects.length; i ++ ) {
+
+					var object = objects[ i ];
+					var target = targets[ i ];
+
+					new TWEEN.Tween( object.position )
+						.to( { x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration )
+						.easing( TWEEN.Easing.Exponential.InOut )
+						.start();
+
+					new TWEEN.Tween( object.rotation )
+						.to( { x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration )
+						.easing( TWEEN.Easing.Exponential.InOut )
+						.start();
+				}
+				new TWEEN.Tween( this )
+					.to( {}, duration * 2 )
+					.onUpdate( render )
+					.start();
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				render();
+			}
+
+			function animate() {
+				if(isbtnchagee){
+					isbtntime++;
+					if(scene.position.z<0){
+						scene.position.z-=parseFloat(scene.position.z/(63-isbtntime)*2);
+					}else{
+						$('.beginhide').removeClass('hide');
+						isbtnchagee =false;
+					};
+				}
+				// 让场景通过x轴或者y轴旋转  & z
+				scene.rotation.y += 0.008;
+				requestAnimationFrame( animate );
+				TWEEN.update();
+				controls.update();
+				// 渲染循环
+				render();
+			}
+			function render() {
+				renderer.render( scene, camera );
+			}
+			
+			function timeFunction(timeback){
+				var ini = 0;
+				transform(targets.dottab, 500 );
+				clearInterval(timeObj)
+				timeObj = setInterval(function(){
+					timeback&&timeback();
+					ini = ini >= 80 ? 0 : ini;
+					switch(++ini/20){
+						case 1:
+							transform( targets.grid, 500 );
+						break;
+						case 2:
+							transform( targets.sphere, 500 );
+						break;
+						case 3:
+							transform(targets.helix, 500 );
+						break;
+						case 4:
+							transform(targets.table, 500 );
+						break;
+					}	
+				},50);
+			}
+			//抽奖的人数，抽奖奖项名字
+			function setPlval(nowindex,drawObj){
+				$("#num_draw_l").text(drawObj[nowindex].p_name)
+				$("#num_draw_pl").val(drawObj[nowindex].p_num)
+			}
+		</script>
+		
+	</body>
+</html>
