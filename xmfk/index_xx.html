@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>消消乐</title>
+		<style type="text/css">
+			.xxlDiv{
+				margin-top: 100px;
+				text-align: center;
+			}
+		
+			body{
+				content: ;
+				font-family: "微软雅黑";
+				color: blue;
+				line-height: 30px;
+				font-size: 15px;
+			}
+			#div{
+				left:200px;
+				width: 120px;
+				height: 50px;
+				/*background: red;*/
+				float: left;
+			}
+			#code{
+				width:150px;
+				height: 50px;
+				float: left;
+			}
+			
+			#canvas{
+				clear: both;
+			}
+			#imput{
+				width: 0;
+				height: 0;
+			}
+			#imputClick{
+				margin-left: 300px;
+				width: 110px;
+				height: 30px;	
+				background: lightgrey;
+				text-indent: 5px;
+			}
+			
+		</style>
+	</head>
+	
+	<body>
+		<div class="xxlDiv">
+		<canvas id="xxl" width="300px" height="240px" ></canvas>
+			
+		</div>
+
+	<div id="">
+		<div id="div">分数计数:</div><div id="code">0</div>	
+	</div>	
+		<div id="imput"></div>
+	</body>
+	<script src="js/xxl.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+	
+	
+//		颜色个数
+		var colorCnt = 5;
+//		获胜分数；
+	  	var lastCode = 1000;
+//    	列
+		var rol =20;
+//		行
+		var rawNum = 20;
+//		小块单个宽度
+		var width = 20;
+//		记分版
+		var code = ID('code') ;
+//		提示（最终）
+		var div = ID('div');
+//		游戏界面
+		var canvas = ID('xxl');
+
+		
+		
+		
+		
+//		函数用到的变量 
+		var ctx = canvas.getContext("2d");
+		var cntNum = 0 ;
+		var arr = dataAry(); 
+		xxl.rawNum = rawNum ;
+		xxl.createAry = [];
+		xxl.deleteAry= new Array();
+		xxl.isActiveEvent = false;		
+		div.style.top = width *rol + 20 + 'px';
+		canvas.width = rawNum*width;
+		canvas.height = rol*width;
+		
+		
+		
+//		执行函数
+		xxl.onload();
+		canvas.addEventListener('click',function clickXxl (ev){
+			if(xxl.isActiveEvent){
+				return;
+			}
+			xxl.isActiveEvent = true;
+			var eve = ev || event;
+			var ele = getElementByEvent(eve);
+			if(ele == false){
+				xxl.isActiveEvent = false;
+				return ;
+			}
+			removeElements(ele,0);
+			xxl.cnt = 0 ;
+			timeInterval('down');	
+		},false) ;
+	
+	
+	</script>
+	
+</html>
