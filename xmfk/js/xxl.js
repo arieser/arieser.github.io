@@ -23,12 +23,11 @@
 			this.yy = Math.floor( i/rawNum) *width;
 		};
 		function create(ctx,block){
-			if(block.display)
-				return ;
+			if(block.display)return ;
 			ctx.drawImage(useImgs[block.color], block.xx + 1  ,block.yy + 1 ,block.width -2 ,block.width - 2)	
 		}
 		function createXxl( ctx , arr){
-			ctx.clearRect(0,0,400,400);
+			ctx.clearRect(0,0,400,600);
 			for (var i = 0 ; i < arr.length ; i ++){
 				var ele =arr[i];
 				create(ctx , ele);
@@ -44,7 +43,6 @@
 				setTimeout(function(){
 					createXxl(ctx,xxl.createAry)
 				},0)
-				
 			},
 			isEnd : function (){
 				for (var i = 0 ; i < arr.length ; i ++){
@@ -60,7 +58,6 @@
 			}
 		};
 		function willRemove(ele ,locat,hh){
-		
 			var ary = ['right','up','down','left'];
 			var x = ele.x;
 			var y = ele.y;
@@ -140,16 +137,14 @@
 					var ele = xxl.createAry[x +y * rawNum];
 					return ele;
 				}
-			}			
+			}
 			return false;
-
 		}
 		function boolNum (n) {
 			if (xxl.deleteAry.length==0)
 				return true;
 			for(var i = 0 ; i < xxl.deleteAry.length ; i ++){
-				if (xxl.createAry[n]==xxl.deleteAry[i])
-					return false;
+				if (xxl.createAry[n]==xxl.deleteAry[i])return false;
 			}
 			return true;
 		}
