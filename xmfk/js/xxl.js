@@ -1,15 +1,14 @@
-	
+	var useImgs = [];
+	for (var i = 0; i < 6 ; i++) {
+		var img = new Image();
+		img.src = "img/" + i + ".png";
+		useImgs.push(img)
+	}
 	function ms(a){
 				console.log(a);
 		}	
 		function ID (id){
 			return document.getElementById(id);
-		}
-		var useImgs = [];
-		for (var i = 0; i < 6 ; i++) {
-			var img = new Image();
-			img.src = "img/" + i + ".png";
-			useImgs.push(img)
 		}
 		function block (color,i){
 			this.width = width;
@@ -42,7 +41,7 @@
 				}
 				setTimeout(function(){
 					createXxl(ctx,xxl.createAry)
-				},0)
+				},100)
 			},
 			isEnd : function (){
 				for (var i = 0 ; i < arr.length ; i ++){
