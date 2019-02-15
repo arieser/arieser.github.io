@@ -5,23 +5,11 @@
 		function ID (id){
 			return document.getElementById(id);
 		}
-		function color(num){	
-			switch(num){
-				case 0 : return '#ff0000';
-					break;
-				case 1 : return '#0000ff';
-					break;
-				case 2 : return '#00ff00';
-					break;
-				case 3 : return '#ffff00';
-					break;
-				case 4 : return '#00ffff';
-					break;
-				case 5 : return '#ffff00';
-					break;
-				default:
-					break;
-			}
+		var useImgs = [];
+		for (var i = 0; i < 6 ; i++) {
+			var img = new Image();
+			img.src = "img/" + i + ".png";
+			useImgs.push(img)
 		}
 		function block (color,i){
 			this.width = width;
@@ -37,9 +25,7 @@
 		function create(ctx,block){
 			if(block.display)
 				return ;
-			ctx.fillStyle = color(block.color);
-			ctx.fillRect(block.xx + 1  ,block.yy + 1 ,block.width -2 ,block.width - 2);
-			
+			ctx.drawImage(useImgs[block.color], block.xx + 1  ,block.yy + 1 ,block.width -2 ,block.width - 2)	
 		}
 		function createXxl( ctx , arr){
 			ctx.clearRect(0,0,400,400);
@@ -55,7 +41,9 @@
 					var ele =new block(arr[i] , i);
 					xxl.createAry[i] = ele;
 				}
-				createXxl(ctx,xxl.createAry)
+				setTimeout(function(){
+					createXxl(ctx,xxl.createAry)
+				},0)
 				
 			},
 			isEnd : function (){
