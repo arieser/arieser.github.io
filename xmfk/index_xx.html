@@ -99,7 +99,9 @@
 		
 		
 //		执行函数
-		xxl.onload();
+		window.onload=function(){
+			xxl.onload();
+		}
 		canvas.addEventListener('click',function clickXxl (ev){
 			if(xxl.isActiveEvent){
 				return;
