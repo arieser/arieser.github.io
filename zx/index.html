@@ -120,6 +120,7 @@
 		<script src="lib/particles.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			/* ---- particles.js config ---- */
+			var datastr;
 function  loadpage(){
 			particlesJS("particles-js", {
 			  "particles": {
@@ -236,7 +237,7 @@ function  loadpage(){
 			  requestAnimationFrame(update);
 			};
 			requestAnimationFrame(update);
-			var datastr = {
+			datastr = {
 				'jiaoshi':'<h2 class="text_h">教师发展前提和方向整理</h2>'+
 				'<h3>职称晋升</h3>'+
 				'<p>三级教师</p>'+
@@ -269,9 +270,10 @@ function  loadpage(){
 				'wenyuan':''
 			}
 			$('.content_div_p').html(datastr['jiaoshi']);
+			
+			}
 			function clicknav(str){
 				$('.content_div_p').html(datastr[str]);
-			}
 			}
 //			function _touch(){
 //			    var startx;//让startx在touch事件函数里是全局性变量。
