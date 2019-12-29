@@ -18,15 +18,17 @@
 			/* position: absolute;left: -62499.9375px; */
         }
 		.t_code{border: #333333 1px solid;padding:5px 10px;margin: 8px;}
-		.canvas{position: fixed;
+		.canvas{
+			position: fixed;
 			z-index: -1;
 			left: 0;
             display: block;
             height: auto;
             margin-left: auto;
             margin-right: auto;
-            margin-bottom: auto;}
-	    .canvas{
+            margin-bottom: auto;
+		}
+		.canvas{
 		  background-color: #eee;
 		  background-image: linear-gradient(45deg,rgba(0,0,0,.25) 25%,transparent 0,transparent 75%,rgba(0,0,0,.25) 0),
 		  linear-gradient(45deg,rgba(0,0,0,.25) 25%,transparent 0,transparent 75%,rgba(0,0,0,.25) 0);
@@ -151,6 +153,13 @@
 			position: absolute;
 			left: 0;top: 0.3rem;
 		}
+		.canvas{
+		  background-color: #eee;
+		  background-image: linear-gradient(45deg,rgba(0,0,0,.25) 25%,transparent 0,transparent 75%,rgba(0,0,0,.25) 0),
+		  linear-gradient(45deg,rgba(0,0,0,.25) 25%,transparent 0,transparent 75%,rgba(0,0,0,.25) 0);
+		  background-position: 0 0, 20px 20px;
+		  background-size: 40px 40px;
+		}
 		.t_code{border: #333333 1px solid;padding:5px 10px;margin: 8px;}
 		.t_c_blue{color: royalblue;}
 		.t_c_red{color: rosybrown;}
@@ -191,9 +200,9 @@
 </head>
  
 <body>
-     
+     <!-- <iframe src="//player.bilibili.com/player.html?aid=54705744&cid=95695930&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe> -->
     <div class="mainContainer  bg">
-        <video name="videoElement" muted="muted"  class="centeredVideo" controls="controls" autoplay="autoplay" width="1024" height="576">
+        <video  loop="loop" name="videoElement" muted="muted"  class="centeredVideo" controls="controls" autoplay="autoplay" width="1024" height="576" loop>
             Your browser is too old which doesn't support HTML5 video
 			
         </video>
@@ -209,7 +218,7 @@
 			</li>
 			<li class="item"><a href="javascript:void(0);" id="about">不看</a></li>
 			<li class="item"><a href="https://www.bilibili.com/video/av54797666">背景视频地址</a></li>
-			<li class="item-a"><a href="avascript:void(0);" id="toggleMuted" class="nosound"></a></li>
+			<li class="item-a"><a href="javascript:void(0);" id="toggleMuted" class="nosound"></a></li>
 		</ul>
 		<div class="content-text display">
 			<div class="content scrollable">
@@ -217,7 +226,7 @@
 			</div>
 		</div>
 	</div>
-	<script src="./asset/lib/inobounce.js" type="text/javascript" charset="utf-8"></script>
+	<script src="asset/lib/inobounce.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://cdn.bootcss.com/flv.js/1.5.0/flv.min.js"></script>
      
     <script>
@@ -236,7 +245,7 @@
 		   
 			player = flvjs.createPlayer({
 				type: 'flv',
-				url: './asset/lib/canvas2.flv'
+				url: 'asset/lib/canvas2.flv'
 			});
 			player.attachMediaElement(element);
 			player.load();
@@ -295,7 +304,9 @@
 				}
 				ctx.putImageData(imageData, 0, 0);
 			}
+			
 			function _render(back){
+				
 				ctx.clearRect(0, 0, postion.width,postion.height);
 				ctx.drawImage(element, 0, 0,postion.width,postion.height);
 				if(this.gray)_chageImgData(ctx);
@@ -342,9 +353,11 @@
 			}
 		});
 		window.addEventListener('resize',function(e){
-			canvasVidio.resize();
+			canvasVidio.resize();console.dir(document.getElementsByName('videoElement')[0])
 		});
-		document.getElementsByName('videoElement')[0].addEventListener('ended',function(){this.play();})
+		document.getElementsByName('videoElement')[0].addEventListener('ended',function(){
+			this.play();
+		})
 		var intervalTime = setInterval(function(){
 			canvasVidio.render();
 		},50);
@@ -408,7 +421,6 @@
 						}
 					});
 					istr+= str1.replace(/[0-9.]{1,100}/g,function(a){
-						console.log(arguments)
 						if(a&&!isNaN(new Number(a))){
 							return '<span class="t_c_blue">'+a+'</span>';
 						}
@@ -489,11 +501,9 @@
 						
 					}
 				})
-				
 			});
 		});
 	</script>
      
 </body>
- 
 </html>
