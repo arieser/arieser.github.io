@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>flv.js demo</title>
+	<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <style media="screen and (min-device-width:480px)">
+		html,body{margin: 0;padding: 0;width: 100%;height: 100%;}
+		body{
+			background: #f3f5f9;
+		}
+		
+		section{overflow: hidden;height: 100%;}
+        .centeredVideo {
+			display: none;
+			/* position: absolute;left: -62499.9375px; */
+        }
+		.t_code{border: #333333 1px solid;padding:5px 10px;margin: 8px;}
+		.canvas{position: fixed;
+			z-index: -1;
+			left: 0;
+            display: block;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;}
+		.page-content{width:1000px;height: 100%;margin:0 auto;background: transparent;position: relative;}
+		.content-text{
+			position: relative;
+			margin-top: 15px;border-radius: 15px;color: #333;
+			height: calc(100% - 120px);
+			padding: 15px;background: rgba(250,247,243,0.9);
+			color: #333333;
+		}
+		.nav{position: relative;list-style: none;font-size: 0; color: whitesmoke;border-radius: 3px;background: rgba(0,0,0,0.3);}
+		.nav .item{
+			font-size: 20px;display: inline-block;font-weight: 600;position: relative;
+			width: 200px;height: 50px;line-height: 50px;cursor: pointer;
+		}
+		.nav li a{
+			display: block;
+			width: 100%;height: 100%;
+			text-align: center;
+			text-decoration: none;color: white;
+		}
+		.nav .item-a{
+			position: absolute;right: 10px;top: 10px;z-index: 1000;width: 30px;height: 30px;
+		}
+		.nav .item-b{
+			position: absolute;right: 50px;top: 10px;z-index: 1000;width: 30px;height: 30px;
+		}
+		
+		.sound{
+			background: url(./asset/icon/shengyinfangda.png) no-repeat;background-size: 100% 100%;
+			width: 100%;height: 100%;
+		}
+		.nosound{
+			width: 100%;height: 100%;background: url(./asset/icon/shengyinguanbi.png) no-repeat;background-size: 100% 100%;
+		}
+		.menu-a+.menu-ul{
+			height: 0;overflow: hidden;
+		}
+		.menu-a:hover+.menu-ul,.menu-ul:hover{
+			height: auto;
+		}
+		.menu-ul{
+			color: #666;z-index: 100;
+			position: absolute;left: -40px;top: 50px;background: rgba(255,255,255,.7);border-radius: 5px;width:100%;
+		}
+		.menu-ul{padding: 0;}
+		.menu-ul li a{color: #666;}
+		ul li{list-style: none;}
+		//content 文本内容
+	    body,html{height: 100%;}
+	    .content{
+	        box-sizing: border-box;
+	        padding: 15px;
+	        margin:0 auto; 
+	        height: 100%;
+	        overflow-x: hidden;
+	        overflow-y: auto;
+	    }
+	    .content::-webkit-scrollbar{display: none;}
+	    h1{text-align: center;font-size: 30px;margin: 0;}
+	
+	    h2,h3,h4,h5,h6{font-size: 24px;margin: 0;color: darkgreen;}
+	    .content p{font-size: 16px;padding-left: 15px;margin: 0.6em 0;}
+		.content strong{font-size: 18px;}
+	    .content img{width: 90%;margin:15px 5%; }
+		.t_c_blue{color: royalblue;}
+		.t_c_red{color: rosybrown;}
+		.t_c_green{color: #006400;}
+	</style>
+	<style type="text/css" media="screen and (max-device-width:481px)">
+		html,body,page-content,canvas{width: 100%;height: 100%;padding: 0;margin: 0;}
+		html{font-size: calc(100vw/3.75);}
+		body{font-size: 0.1rem;}
+		.nav{
+			z-index: 1000;width: 100%;position: fixed;left: 0;top:0;background: rgba(0,0,0,0.4);
+		}
+		.centeredVideo{display: none;}
+		.page-content{overflow: hidden;z-index: 10;}
+		.mainContainer{position: fixed;left: 0;top:0;}
+		ul{margin: 0;padding: 0;}
+		.nav .item{
+			display: inline-block;text-align:center;
+			height: 0.3rem;line-height: 0.3rem;width: 0.9rem;
+		}
+		.menu-ul{display: none;text-align:left;background: rgba(0,0,0,0.3);padding-left: 0.1rem;padding-right: 0.1rem;}
+		.menu-ul ul li{padding-left: 0.1rem;}
+		.nav .item a{ color: white;width: 100%;height: 100%;display: inline-block;text-decoration: none;}
+		.nav .item-a{position: absolute;width: 0.2rem;height: 0.2rem;right:0.1rem ;top: 0.05rem;}
+		.nav .item-a a{width: 100%;height: 100%;display: inline-block;}
+		.sound{
+			background: url(./asset/icon/shengyinfangda.png) no-repeat;background-size: 100% 100%;
+		}
+		.nosound{
+			background: url(./asset/icon/shengyinguanbi.png) no-repeat;background-size: 100% 100%;
+		}
+		.content-text{width:90%;z-index: 100;position: relative;top:0.35rem;left:5%;height:calc(100% - 0.4rem);}
+		.content-text .content{
+			box-sizing: border-box;
+			padding: 0.06rem;width: 100%;height:100%;overflow-x: hidden;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
+			-webkit-transform: translateZ(0px);
+			border-radius: 0.03rem;background: rgba(255,255,255,.7);
+			
+		}
+		.content h1{font-size: 0.1rem;text-align: center;}
+		h2,h3,h4,h5,h6{font-size: 0.08rem;color: darkgreen;}
+		p{font-size: 0.06rem;}
+		.menu-a.hover+.menu-ul{
+			display: block;
+			position: absolute;
+			left: 0;top: 0.3rem;
+		}
+		.t_code{border: #333333 1px solid;padding:5px 10px;margin: 8px;}
+		.t_c_blue{color: royalblue;}
+		.t_c_red{color: rosybrown;}
+		.t_c_green{color: #006400;}
+	</style>
+	<script type="text/javascript">
+		(function(){//过渡动画
+			var style = document.createElement("style");
+			style.type = "text/css";
+			var h = window.innerHeight;
+			//var w = window.innerWidth;
+			//w =w>1000?1000:w;
+			var str = '.animation-display{animation:animate1 2s 1 forwards;}@keyframes animate1{';
+			var len = parseInt(h/140)*10;
+			var arr1=[], arr2 = [], arr3 = [];
+			for(var index = 0;index<len;index++){
+				var xx = 100*(index%10);
+				var yy = parseInt(index/10)*120;
+				arr1.push(xx+'px '+yy+'px,'+(xx+100)+'px '+yy+'px,'+(xx+100)+'px '+(yy+120)+'px,'+xx+'px '+(yy+120)+'px,'+xx+'px '+yy+'px');
+				if(xx==900)arr1.push('0px '+yy+'px,'+'0px '+(yy+120)+'px');
+				arr2.push((xx+50)+'px '+yy+'px,'+(xx+100)+'px '+(yy+60)+'px,'+(xx+50)+'px '+(yy+120)+'px,'+xx+'px '+(yy+60)+'px,'+(xx+50)+'px '+yy+'px');
+				if(xx==900)arr2.push('0px '+yy+'px,'+'0px '+(yy+120)+'px');
+				arr3.push((xx+50)+'px '+(yy+60)+'px,'+(xx+50)+'px '+(yy+60)+'px,'+(xx+50)+'px '+(yy+60)+'px,'+(xx+50)+'px '+(yy+60)+'px,'+(xx+50)+'px '+(yy+60)+'px');
+				if(xx==900)arr3.push('0px '+(yy+60)+'px,'+'0px '+(yy+180)+'px');
+			}
+			str+='0%{clip-path:polygon('+arr1.join(',')+',0 0)}';
+			str+='50%{clip-path:polygon('+arr2.join(',')+',0 0)}';
+			str+='100%{clip-path:polygon('+arr3.join(',')+',0 60px)}}';
+			try{
+			　　style.appendChild(document.createTextNode(str));
+			}catch(ex){
+			　　style.styleSheet.cssText = str;//针对IE	
+			}	
+			var head = document.getElementsByTagName("head")[0];
+			head.appendChild(style);
+		})()
+	</script>
+</head>
+ 
+<body>
+     
+    <div class="mainContainer  bg">
+        <video name="videoElement" muted="muted"  class="centeredVideo" controls="controls" autoplay="autoplay" width="1024" height="576">
+            Your browser is too old which doesn't support HTML5 video
+			
+        </video>
+		<canvas class="canvas" id="canvas" ></canvas>
+    </div>
+	<div class="page-content">
+		<ul class="nav">
+			<li class="item">
+				<a href="javascript:void(0);" class="menu-a">目录</a>
+				<ul id="menu-ul" class="menu-ul">
+					
+				</ul>
+			</li>
+			<li class="item"><a href="javascript:void(0);" id="about">不看</a></li>
+			<li class="item"><a href="https://www.bilibili.com/video/av54797666">背景视频地址</a></li>
+			<li class="item-a"><a href="avascript:void(0);" id="toggleMuted" class="nosound"></a></li>
+		</ul>
+		<div class="content-text display">
+			<div class="content scrollable">
+				
+			</div>
+		</div>
+	</div>
+	<script src="./asset/lib/inobounce.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.bootcss.com/flv.js/1.5.0/flv.min.js"></script>
+     
+    <script>
+		
+		var player;
+        function flv_load() {
+			var element = document.getElementsByName('videoElement')[0];
+			if (typeof player !== "undefined") {
+				if (player != null) {
+					player.unload();
+					player.detachMediaElement();
+					player.destroy();
+					player = null;
+				}
+			}
+		   
+			player = flvjs.createPlayer({
+				type: 'flv',
+				url: './asset/lib/canvas2.flv'
+			});
+			player.attachMediaElement(element);
+			player.load();
+			player.play();
+        }
+		
+ 
+        function flv_start() {
+            player.play();
+        }
+ 
+        function flv_pause() {
+            player.pause();
+        }
+ 
+        function flv_destroy() {
+            player.pause();
+            player.unload();
+            player.detachMediaElement();
+            player.destroy();
+            player = null;
+        }
+        function flv_seekto() {
+            var input = document.getElementsByName('seekpoint')[0];
+            player.currentTime = parseFloat(input.value);
+        }
+		(function(fun,win){win.loadCanvas = fun;})(function(json){
+			var width = window.innerWidth;
+			var height = window.innerHeight;
+			var canvas = json.canvas;
+			var ctx = canvas.getContext('2d');
+			var element = json.element;
+			var  postion ={
+				 width :json.width||width ,height :json.height||height
+			};
+			canvas.width = width;
+			canvas.height = height;
+			function _chageImgData(ctx){
+				var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+				var imageData_length = imageData.data.length / 4;
+				// 解析之后进行算法运算
+				for (var i = 0; i < imageData_length; i++) {
+					var red = imageData.data[i * 4];
+					var green = imageData.data[i * 4 + 1];
+					var blue = imageData.data[i * 4 + 2];
+					var gray = 0.3 * red + 0.59 * green + 0.11 * blue;
+					var new_black;
+					if (gray > 126) {
+						new_black = 255;
+					} else {
+						new_black = 0;
+					}
+					imageData.data[i * 4] = new_black;
+					imageData.data[i * 4 + 1] = new_black;
+					imageData.data[i * 4 + 2] = new_black;
+				}
+				ctx.putImageData(imageData, 0, 0);
+			}
+			function _render(back){
+				ctx.clearRect(0, 0, postion.width,postion.height);
+				ctx.drawImage(element, 0, 0,postion.width,postion.height);
+				if(this.gray)_chageImgData(ctx);
+				if(back)back.call(this);
+			}
+			
+			
+			return {
+				frame:postion,
+				render:_render,
+				gray:true,
+				resize:function(){
+					var width = window.innerWidth;
+					var height = window.innerHeight;
+					postion.width =width 
+					postion.height =height
+					canvas.width = width;
+					canvas.height = height;
+				}
+			}
+		},window);
+		
+		var canvas = document.getElementById('canvas');
+		var canvasVidio = loadCanvas({
+			element:document.getElementsByName('videoElement')[0],
+			canvas:canvas,
+			width:document.body.clientWidth,
+			height:document.body.clientHeight,
+			clearTimeout : 500
+		});
+		document.addEventListener('DOMContentLoaded', function () {
+		    flv_load();
+		});
+		document.getElementById('toggleMuted').addEventListener('click',function(){
+			var el = document.getElementsByName('videoElement')[0];
+			if(el.muted == true){
+				this.className = 'sound'
+				el.muted = false;
+				canvasVidio.gray = false;
+			}else{
+				this.className = 'nosound'
+				el.muted = true;
+				canvasVidio.gray = true;
+			}
+		});
+		window.addEventListener('resize',function(e){
+			canvasVidio.resize();
+		});
+		document.getElementsByName('videoElement')[0].addEventListener('ended',function(){this.play();})
+		var intervalTime = setInterval(function(){
+			canvasVidio.render();
+		},50);
+    </script>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script>
+	    'use strict'
+		$.extend($.fn,{
+			addElementByTagetName:function(data){
+				var $this = $(this);
+				$this.css('display','none');
+				$.each(
+					data,
+					function (index,value) {
+						var $el = $('<'+value.key+">");
+						if(value.src)$el.attr("src",value.src);
+						if(value.class&&value.value)$el.html($.getCodeText(value.value));
+						else if(value.value)$el.html(value.value);
+						if(value.class)$el.attr('class',value.class);
+						$this.append($el);
+					}
+				);
+				$this.css('display','');
+			},
+			addListAndClickA:function(dataArr){
+				var $this = $(this);
+				$.each(
+					dataArr,
+					function(index,value){
+						var $li = $('<li>');
+						$li.append('<a>'+value.name+'</a>');
+						var $ul = $('<ul class=""></ul>')
+						$.each(value.pages,function(i,val){
+							$ul.append('<li><a pageid="'+value.subid+'" contentid="'+val.id+'">'+val.name+'</a></li>')
+						});
+						$li.append($ul);
+						$this.append($li);
+					}
+				);
+			}
+		});
+		$.extend($,{
+			getUrlParam:function (name){
+				var reg=/([a-z0-9\_]*)=([a-z0-9\_]*)|&/ig;
+				var params = location.href.split('?')[1];
+				if(!params)return null;
+				return params.replace(reg,function(){
+					if(name ==arguments[1])return arguments[2];
+					return '';
+				})||null;
+			},
+			getCodeText:function(str){
+				var strarr = str.split('<br/>');
+				var rtArr = [];
+				$.each(strarr,function(i,val){
+					var istr = ''
+					var arr = val.split('#');
+					var str1= arr[0].replace(/("[^]{1,100}")|('[^]{1,100}')/g,function(a){
+						if(a){
+							return '<span class="t_c_red">'+a+'</span>';
+						}
+					});
+					istr+= str1.replace(/[0-9.]{1,100}/g,function(a){
+						console.log(arguments)
+						if(a&&!isNaN(new Number(a))){
+							return '<span class="t_c_blue">'+a+'</span>';
+						}
+					});
+					if(arr.length>1)istr += '<span class="t_c_green">'+arr[1]+'</span>';
+					
+					rtArr.push(istr);
+				});
+				return rtArr.join('<br/>');
+			},
+			getJsonDeferred:function (url){//deferred 函数
+				var dfd = $.Deferred();
+				$.getJSON(url,function(data){
+					dfd.resolve(data);
+				})
+				return dfd.promise();
+			}
+		});
+		
+				
+		$(function(){
+			var urlArray = [];
+			var pageData = null;
+			var dfd = $.Deferred();
+			var root = './asset/';
+			$("#menu-ul").on('click','a[pageid]',function(){
+				var $this = $(this);
+				var page = $this.attr('pageid');
+				var content = $this.attr('contentid');
+				$.each(pageData,function(i,v){
+					if(v.subid==page)$.each(v.pages,function(k,val){
+						if(val.id==content){
+							$('.animation-display').removeClass('animation-display');
+							document.title = val.name;
+							$.getJSON(root+val.filePath,function(req){
+								console.log(req)
+								$('.content').html('').addElementByTagetName(req.data);
+							});
+						}
+					});
+				});
+				//clearInterval(intervalTime);
+				//location.href = './index.html?pageid='+$this.attr('pageid')+'&contentid='+$this.attr('contentid');
+			});
+			$(".menu-a").on('click',function(){
+				$(this).toggleClass('hover');
+			});
+			$('#about').on('click',function(){
+				$('.content-text').toggleClass('animation-display')
+			});
+			$.getJSON(root+'json/index.json',function(params) {//获取数据
+				pageData = params.pageData;
+				for(var index = 0;index<pageData.length;index++){
+					var el = pageData[index];
+					urlArray.push($.getJsonDeferred(root+el.filePath));
+				}
+				$.when.apply($,urlArray)
+				.done(function(){
+					for(var index = 0 ;index<pageData.length;index++){
+						pageData[index].pages = arguments[index].pageData;
+						var pageid = $.getUrlParam('pageid')||1;
+						if(arguments[index].id==pageid){
+							dfd.resolve(arguments[index].pageData);
+						}
+					}
+					$('#menu-ul').addListAndClickA(pageData);
+				});
+			});
+			$.when(dfd.promise())
+			.done(function(data){
+				var contentid = $.getUrlParam('contentid')||1;
+				$.each(data,function(index,value){
+					if(contentid == value.id){
+						document.title = value.name;
+						$.getJSON(root+value.filePath+'?t='+Math.random(),function(req){
+							$('.content').addElementByTagetName(req.data);
+						});
+						
+					}
+				})
+				
+			});
+		});
+	</script>
+     
+</body>
+ 
+</html>
