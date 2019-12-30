@@ -173,7 +173,7 @@
 <body>
      <!-- <iframe src="//player.bilibili.com/player.html?aid=54705744&cid=95695930&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe> -->
     <div class="mainContainer  bg">
-        <video  loop="loop" name="videoElement" muted="muted"  class="centeredVideo" controls="controls" autoplay="autoplay" width="1024" height="576" loop>
+        <video  name="videoElement" muted="muted"  class="centeredVideo" controls="controls" autoplay="autoplay" src="asset/lib/canvas2.mp4"  width="1024" height="576" loop>
             Your browser is too old which doesn't support HTML5 video
 			
         </video>
@@ -237,48 +237,7 @@
 </script>
     <script>
 		
-		var player;
-        function flv_load() {
-			var element = document.getElementsByName('videoElement')[0];
-			if (typeof player !== "undefined") {
-				if (player != null) {
-					player.unload();
-					player.detachMediaElement();
-					player.destroy();
-					player = null;
-				}
-			}
-		   
-			player = flvjs.createPlayer({
-				type: 'flv',
-				url: 'asset/lib/canvas2.flv'
-			});
-			player.attachMediaElement(element);
-			player.load();
-			player.play();
-        }
-		
- 
-        function flv_start() {
-            player.play();
-        }
- 
-        function flv_pause() {
-            player.pause();
-        }
- 
-        function flv_destroy() {
-            player.pause();
-            player.unload();
-            player.detachMediaElement();
-            player.destroy();
-            player = null;
-        }
-        function flv_seekto() {
-            var input = document.getElementsByName('seekpoint')[0];
-            player.currentTime = parseFloat(input.value);
-        }
-		(function(fun,win){win.loadCanvas = fun;})(function(json){
+	(function(fun,win){win.loadCanvas = fun;})(function(json){
 			var width = window.innerWidth;
 			var height = window.innerHeight;
 			var canvas = json.canvas;
@@ -343,14 +302,12 @@
 			height:document.body.clientHeight,
 			clearTimeout : 500
 		});
-		document.addEventListener('DOMContentLoaded', function () {
-		    flv_load();
-		});
 		document.getElementById('toggleMuted').addEventListener('click',function(){
 			var el = document.getElementsByName('videoElement')[0];
 			if(el.muted == true){
-				this.className = 'sound'
-				el.muted = false;
+				el.play();
+				this.className = 'sound';
+				var t = setTimeout(function(){el.muted = false;clearTimeout(t)},0);
 				canvasVidio.gray = false;
 			}else{
 				this.className = 'nosound'
