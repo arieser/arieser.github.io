@@ -1,0 +1,125 @@
+{
+	"data":[
+		{
+			"key":"h1",
+			"value":"python变量"
+		},
+		{
+			"key":"h2",
+			"value":"python基础语法"
+		},
+		{
+			"key":"p",
+			"value":"基础语法部分包括保留字符、行和缩进、语句规则、代码注释、字符等。注释三个为单双引号,或者#,多行代码在一行靠'；'分开。其他语句区分靠缩进对齐,好奇怪。不过都没啥好看的"
+		},
+		{
+			"key":"h2",
+			"value":"python变量"
+		},
+		{
+			"key":"p",
+			"value":"变量基本类型"
+		},
+		{
+			"key":"p",
+			"value":"<strong>Python3 中有六个标准的数据类型：</strong><br/>Number（数字）、String（字符串）、List（列表）、Tuple（元组）、Set（集合）、Dictionary（字典）<br/><strong>Python3 的六个标准数据类型中：</strong><br/>不可变数据（3 个）：Number（数字）、String（字符串）、Tuple（元组）；<br/>可变数据（3 个）：List（列表）、Dictionary（字典）、Set（集合）。"
+		},
+		{
+			"key":"h2",
+			"value":"1.数字"
+		},
+		{
+			"key":"p",
+			"value":"Python3 支持 int、float、bool、complex（复数）。（对复数不是很了解）<br/>type(a)（返回a变量类型）、isinstance(a, b)（返回a是否是b类型或b类型子类的bool值）py2没有bool类型"
+		},
+		{
+			"key":"p",
+			"value":"<strong>数字运算</strong>"
+		},
+		{
+			"key":"div",
+			"class":"t_code",
+			"value":">>>5 + 4  # 加法  9<br/> >>> 4.3 - 2 # 减法 2.3<br/> >>> 3 * 7  # 乘法 21<br/> >>> 2 / 4  # 除法，得到一个浮点数 0.5<br/> >>> 2 // 4 # 除法，得到一个整数 0<br/> >>> 17 % 3 # 取余 2<br/> >>> 2 ** 5 # 乘方 32"
+		},
+		{
+			"key":"p",
+			"value":"1、Python可以同时为多个变量赋值，如a, b = 1, 2。<br/>2一个变量可以通过赋值指向不同类型的对象。<br/>3、数值的除法包含两个运算符：/ 返回一个浮点数，// 返回一个整数。<br/>4、在混合计算时，Python会把整型转换成为浮点数。"
+		},
+		{
+			"key":"h2",
+			"value":"String（字符串）"
+		},
+		{
+			"key":"p",
+			"value":"Python中的字符串用单引号 ' 或双引号 \" 括起来，同时使用反斜杠 \\ 转义特殊字符。<br/>字符串前面添加一个 r，表示原始字符串。使用 \"\"\"...\"\"\"或者 '''...''' 跨越多行。<br/>字符串不能被改变。向一个索引位置赋值.如word[0] = 'm'会导致错误。"
+		},
+		{
+			"key":"p",
+			"value":""
+		},
+		{
+			"key":"h2",
+			"value":"List（列表）"
+		},
+		{
+			"key":"div",
+			"class":"t_code",
+			"value":">>>a = [1, 2, 3, 4, 5, 6]<br/> >>> a[0] = 9<br/> >>> a[2:5] = [13, 14, 15]<br/> >>> a[9, 2, 13, 14, 15, 6]<br/> >>> a[2:5] = []   # 将对应的元素值设置为 [] <br/> >>> a[9, 2, 6]"
+		},
+		{
+			"key":"h2",
+			"value":"Tuple（元组）"
+		},
+		{
+			"key":"p",
+			"value":"类似于 List（列表)、元组是不允许更新的。列表是允许更新的："
+		},
+		{
+			"key":"h2",
+			"value":"Set（集合）"
+		},
+		{
+			"key":"p",
+			"value":"集合（set）是由<strong>一个或数个形态</strong>各异的大小整体组成的，构成集合的事物或对象称作元素或是成员。<br/>基本功能是进行成员关系测试和删除重复元素。<br/>可以使用大括号 { } 或者 set() 函数创建集合，注意：创建一个空集合必须用 set() 而不是 { }，因为 { } 是用来创建一个空字典。<br/>"
+		},
+		{
+			"key":"div",
+			"value":"print(a - b) # a 和 b 的差集<br/>print(a | b) # a 和 b 的并集<br/>print(a & b) # a和b的交集<br/>print(a ^ b)  # a和b中不同时存在的元素",
+			"class":"t_code"
+		},
+		{
+			"key":"h2",
+			"value":"Dictionary（字典）"
+		},
+		{
+			"key":"p",
+			"value":"字典是一种映射类型，无序的"
+		},
+		{
+			"key":"div",
+			"class":"t_code",
+			"value":"print (dict['one'])       # 输出键为 'one' 的值<br/>print (dict[2])           # 输出键为 2 的值print (tinydict)          # 输出完整的字典<br/>print (tinydict.keys())   # 输出所有键<br/>print (tinydict.values()) # 输出所有值"
+		},
+		{
+			"key":"h2",
+			"value":"Python数据类型转换"
+		},
+		{
+			"key":"p",
+			"value":"<strong>看看就好</strong><br/>int(x [,base])将x转换为一个整数<br/>float(x)将x转换到一个浮点数<br/>complex(real [,imag])创建一个复数<br/>str(x)将对象 x 转换为字符串<br/>repr(x)将对象 x 转换为表达式字符串<br/>eval(str)用来计算在字符串中的有效Python表达式,并返回一个对象<br/>tuple(s)将序列 s 转换为一个元组<br/>list(s)将序列 s 转换为一个列表<br/>set(s)转换为可变集合<br/>dict(d)创建一个字典。d 必须是一个 (key, value)元组序列。<br/>frozenset(s)转换为不可变集合<br/>chr(x)将一个整数转换为一个字符<br/>ord(x)将一个字符转换为它的整数值<br/>hex(x)将一个整数转换为一个十六进制字符串<br/>oct(x)将一个整数转换为一个八进制字符串"
+		},
+		{
+			"key":"h2",
+			"value":"小结"
+		},
+		{
+			"key":"p",
+			"value":"初看python心声:变量声明在哪、是不是没有作用域的概念。全局局部怎么分？<br/>python的集合应该是我见过最像集合的集合,能进行交并差交集的补集的运算<br/>而且python元组、列表都能像字符串一样做+、*操作,如下:"
+		},
+		{
+			"key":"p",
+			"class":"t_code",
+			"value":"print (list)            # 输出完整列表<br/>print (list[0])         # 输出列表第一个元素<br/>print (list[1:3])       # 从第二个开始输出到第三个元素<br/>print (list[2:])        # 输出从第三个元素开始的所有元素<br/>print (tinylist * 2)    # 输出两次列表<br/>print (list + tinylist) # 连接列表"
+		}
+	]
+}
