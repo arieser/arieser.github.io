@@ -40,7 +40,7 @@
 						c.height = img.height;
 						var allnum = img.width*img.height;
 						img.onload = function(){
-							ctx.drawImage(img, 0, 0,600,600);
+							ctx.drawImage(img, 0, 0,200,200);
 							var imgData= ctx.getImageData(0,0,img.width,img.height).data;
 							var colorNum=0;
 							if(!isarm) for (var i = 0; i < imgData.length; i+=4) {
@@ -69,11 +69,11 @@
 		function renderData(imgarr){
 			var c = $('<canvas></canvas>');
 			var colorArea = parseInt(255/imgarr.length)+1;
-			c.attr('width',60000);
-			c.attr('height',60000);
-			c.width(60000);
-			c.height(60000);
-			
+			c.attr('width',10000);
+			c.attr('height',10000);
+			c.width(10000);
+			c.height(10000);
+			$('body').append(c);
 			getImageDataOfFiles("#arm-image",function(data){
 				var imageData = data[0].img;
 				var w = data[0].w;
@@ -86,14 +86,10 @@
 						var num = parseInt(colorNum/colorArea);
 						debugger
 						ctx.beginPath();
-						ctx.drawImage(imgarr[num].img,parseInt(jj/4)*100, ii*100,100,100);
+						ctx.drawImage(imgarr[num].img,parseInt(jj/4)*50, ii*50,50,50);
 					}
 				}
 			},true);
-			var a = document.createElement('a');
-			$('body').append(a);
-			a.href = c[0].toDataURL("image/png");
-			a.innerText = '下载图片'
 			
 		}
 		
