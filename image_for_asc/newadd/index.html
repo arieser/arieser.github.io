@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>文字</title>
+		<style type="text/css">
+			body,html{width: 100%;margin: 0;padding: 0;}
+			canvas{width: 100%;}
+			input{
+				position: fixed;bottom: 150px;left: 50%;transform: translateX(-50%);
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="" width="1920" height="1080"></canvas>
+		<input type="" name="" id="" value="" />
+	</body>
+	<script type="text/javascript">
+		function dom(str){
+			return document.querySelector(str);
+		}
+		function myForeach(arr,back){
+			console.log(arr);
+			var len = arr.length;
+			for (let i = 0; i < len; i++) {
+				if(back.call(arr[i],i,arr[i]))break;
+			}
+		}
+		var canvas = dom('canvas');
+		var context = canvas.getContext('2d')
+		
+		function getTextArrOftext(str,fs){//获取文本数据
+			context.font = fs/2+'px 微软雅黑';
+			context.textAlign = 'left';
+			context.textBaseline = 'middle';
+			context.fillStyle = 'rgba(0,0,0,1)';
+			var w = parseInt(context.measureText(str).width);
+			context.fillText(str,0,fs/2,w);
+			var data = context.getImageData(0,0,w,fs).data;
+			debugger
+			var w4= w*4;
+			var returnData = [];
+			for(var i=0;i<fs;i++){//高 图片数据
+				for(var j=0;j<w4;j+=4){//宽 图片数据
+					var num = data[i*w4+j+3];
+					if(num > 0){
+						var n = j/4;
+						if(j==0)n = 0;
+						var r1 = Math.random()*(21-10);//给他们初始偏移量的50分之一x
+						var r2 = Math.random()*(21-10);//给他们初始偏移量的50分之一y
+						returnData.push({
+							x:n,y:i,
+							xs:r1,ys:r2,
+							count:50,//多少帧之后正常
+						});	
+					}
+				}
+			}
+			return returnData;
+		}
+		var textData = getTextArrOftext('0000',50);
+		function render(){
+			context.clearRect(0,0,canvas.width,canvas.height);
+			var w = 7,r = 5;
+			myForeach(textData,function(){//遍历得到的数据画点
+				context.beginPath();
+				if(this.count>0)this.count--;
+				context.fillStyle = 'rgba(0,255,255,'+((50-this.count)*0.013)+')';
+				context.arc(this.x*w*2+this.xs*this.count,this.y*w*2+this.ys*this.count,r,0,2*Math.PI);
+				context.fill();
+			});
+		}
+		document.querySelector('input').addEventListener('change',function(){
+			textData = getTextArrOftext(this.value,50);
+		});
+		setInterval(function(){
+			render();	
+		},50)
+	</script>
+</html>
