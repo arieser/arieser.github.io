@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			video,.hidden{
+				/* display: none; */
+			}
+			canvas{width: 95%;}
+		
+		</style>
+	</head>
+	<body>
+		<canvas id="hidden" class="hidden" width="1920" height="1080"></canvas>
+		<video width="1920" id="video"  height="1080" loop="loop">
+			<source src="video.mp4" type="video/mp4"></source>
+			<source src="video.ogv" type="video/ogg"></source>
+			<source src="video.webm" type="video/webm"></source>
+			<object width="" height="" type="application/x-shockwave-flash" data="video.swf">
+				<param name="movie" value="video.swf" />
+				<param name="flashvars" value="autostart=true&amp;file=video.swf" />
+			</object>
+			当前浏览器不支持 video直接播放，点击这里下载视频： <a href="video.webm">下载视频</a>
+		</video>
+		<button type="button">播放</button>
+		<canvas id="canvas" width="1920" height="1080"></canvas>
+	</body>
+	<script type="text/javascript">
+		
+		!function(){
+			var canvas = document.querySelector('#canvas');
+			var ca = document.querySelector('#hidden')
+			var ctx = canvas.getContext('2d');
+			var context = ca.getContext('2d');
+			var ww = parseInt(canvas.width/10);
+			var w = canvas.width;
+			var h = canvas.height;
+			var hh = parseInt(canvas.height/10);
+			var ll = parseInt(255/17);
+			var element = document.querySelector('#video');
+			document.querySelector('button').addEventListener('click',function(){
+				element.play();
+			});
+			function getTextData(arr){
+				var data=[];
+				for(var key in arr){
+					var el = arr[key];
+					context.beginPath();
+					context.font = '10px 微软雅黑';
+					context.fillText(el,0,hh+5);
+					var img = context.getImageData(10*key,hh,10,10);
+					data.push(img);
+				}
+				return  data;	
+			};
+			//var textData = getTextData();
+			var textData = ["M", "N", "H", "Q", "$", "O", "C", "?", "7", ">", "!", ":", "–", ";", "."];
+			var asklen = textData.length;
+			
+			function rander(){
+				context.clearRect(0,0,canvas.width,canvas.height);
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				context.drawImage(element, 0, 0,ww,hh);
+				var imageData = context.getImageData(0,0,ww,hh).data;
+				var nw = ww*4;
+				for(var i=0;i < hh;i++){
+					for(var j=0;j < nw;j+=4){
+						ctx.beginPath();
+						var gray = imageData[i*nw+j]*0.299+imageData[i*nw+j+1]*0.578+imageData[i*nw+j+2]*0.113;
+						var num = j/4;
+						if(j==0)num = 0;
+						ctx.fillText(textData[Math.floor(gray / 18)],num*10,i*10); 
+					}
+				}
+			}
+			setInterval(function(){
+				rander();
+			},60);
+			
+		}()
+	</script>
+</html>
