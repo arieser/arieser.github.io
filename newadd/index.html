@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字组成文字</title>
+</head>
+<body>
+    <style>
+        p{font-size: 14px;line-height: 14px;}
+        canvas{background-color:black;}
+    </style>
+    <div>要组成的文字：<input type="text" id="input1"></div>
+   <div>组成的文字的文字：<input type="text" id="input2"></div>
+   <div class="content"></div>
+    <script>
+        function textToImg(name) {
+     		var fontSize = 6;
+            var canvas = document.createElement('canvas');
+            canvas.width = 12;
+            canvas.height = 12;
+            var context = canvas.getContext("2d");
+            context.fillStyle = "#fff";
+            context.font="11px 微软雅黑";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+            context.fillText(name, fontSize, fontSize);
+            return context.getImageData(0, 0, 20, 20); 
+    //         return canvas.toDataURL("image/png")
+        }
+        
+        
+        function a(imgData,text){
+            var p = document.createElement('p');
+            var imgDataArr = imgData.data; 
+            var imgDataWidth = imgData.width; 
+            var imgDataHeight = imgData.height; 
+            var pHTML = '';
+            var ptext = "";
+            for (var h = 0; h < imgDataHeight; h ++) { 
+                for (var w = 0; w < imgDataWidth; w ++) { 
+                    var index = h*imgDataWidth*4+w*4;
+                    var r = imgDataArr[index + 0]; 
+                    var g = imgDataArr[index + 1]; 
+                    var b = imgDataArr[index + 2]; 
+                    if(r==255&&b==255&&g==255){
+                        pHTML+=text
+                    }else{
+                        pHTML+='ㅤ'
+                    }
+                } 
+                pHTML+="<br>"
+            } 
+            p.innerHTML += pHTML;
+            document.querySelector('.content').appendChild(p) ;
+
+            
+        }
+        function  view(text,text2){
+            var  tl = text.length;
+                var nl = text2.length;
+                for (let index = 0; index < tl; index++) {
+                    const element = text[index];
+                    var imgData = textToImg(element);
+                    a(imgData,text2[index%nl]);
+                   
+                }
+        }
+        document.querySelector('#input1').value = "元宵快乐";
+        document.querySelector('#input2').value = "石头"
+        view( "元宵快乐","石头")
+        document.onkeydown=function(ev){
+            var event=ev ||event
+            if(event.keyCode==13){
+                
+                var text = document.querySelector('#input1').value||"元";
+                var number = document.querySelector('#input2').value||'哈';
+                view(text,number)
+            }
+        }
+        
+
+    </script>
+</body>
+</html>
