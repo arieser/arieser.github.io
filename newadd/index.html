@@ -15,13 +15,14 @@
    <div class="content"></div>
     <script>
         function textToImg(name) {
-     		var fontSize = 6;
-            var canvas = document.createElement('canvas');
-            canvas.width = 12;
-            canvas.height = 12;
+     		var fontSize = 13;
+            var fns = 25;
+            var canvas =  document.createElement('canvas');
+            canvas.width = fns;
+            canvas.height = fns;
             var context = canvas.getContext("2d");
             context.fillStyle = "#fff";
-            context.font="11px 微软雅黑";
+            context.font=fns+"px 微软雅黑";
             context.textAlign = "center";
             context.textBaseline = "middle";
             context.fillText(name, fontSize, fontSize);
